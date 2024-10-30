@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { type Project } from '../_lib/types';
-import { HelpCircle } from 'lucide-react';
+import { useState } from "react";
+import { type Project } from "../_lib/types";
+import { HelpCircle } from "lucide-react";
 
 interface SettingsProps {
   projects: Project[];
@@ -8,7 +8,7 @@ interface SettingsProps {
 }
 
 export function Settings({ projects, onProjectsImport }: SettingsProps) {
-  const [importError, setImportError] = useState<string>('');
+  const [importError, setImportError] = useState<string>("");
   const [showTooltip, setShowTooltip] = useState(false);
 
   const schemaExample = `[
@@ -28,12 +28,12 @@ export function Settings({ projects, onProjectsImport }: SettingsProps) {
 
   const exportData = () => {
     const dataStr = JSON.stringify(projects, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const dataBlob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(dataBlob);
-    
-    const link = document.createElement('a');
+
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'projects.json';
+    link.download = "projects.json";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -49,33 +49,38 @@ export function Settings({ projects, onProjectsImport }: SettingsProps) {
       try {
         const content = event.target?.result as string;
         const imported = JSON.parse(content);
-        
+
         // Enhanced validation
-        if (!Array.isArray(imported)) throw new Error('Data must be an array of projects');
-        if (!imported.every(p => 
-          p.name && 
-          Array.isArray(p.tasks) &&
-          p.tasks.every((t: any) => 
-            t.id && 
-            typeof t.content === 'string' &&
-            typeof t.completed === 'boolean'
+        if (!Array.isArray(imported))
+          throw new Error("Data must be an array of projects");
+        if (
+          !imported.every(
+            (p) =>
+              p.name &&
+              Array.isArray(p.tasks) &&
+              p.tasks.every(
+                (t: any) =>
+                  t.id &&
+                  typeof t.content === "string" &&
+                  typeof t.completed === "boolean"
+              )
           )
-        )) {
-          throw new Error('Invalid project structure');
+        ) {
+          throw new Error("Invalid project structure");
         }
 
         // Add missing properties if they don't exist
-        const normalizedProjects = imported.map(p => ({
+        const normalizedProjects = imported.map((p) => ({
           ...p,
           timeSpent: p.timeSpent || 0,
-          isTracking: false
+          isTracking: false,
         }));
 
         onProjectsImport(normalizedProjects);
-        setImportError('');
-        e.target.value = ''; // Reset file input
+        setImportError("");
+        e.target.value = ""; // Reset file input
       } catch (err) {
-        setImportError('Failed to import data. Please check the file format.');
+        setImportError("Failed to import data. Please check the file format.");
       }
     };
     reader.readAsText(file);
@@ -84,10 +89,10 @@ export function Settings({ projects, onProjectsImport }: SettingsProps) {
   return (
     <div className="p-8 max-w-2xl mx-auto">
       <h1 className="text-2xl mb-8">Settings</h1>
-      
+
       <section className="mb-8">
         <h2 className="text-xl mb-4">Data Management</h2>
-        
+
         <div className="space-y-4">
           <div>
             <button
@@ -102,14 +107,17 @@ export function Settings({ projects, onProjectsImport }: SettingsProps) {
             <div className="flex items-center gap-2 mb-2">
               <label>Import Projects:</label>
               <div className="relative">
-                <HelpCircle 
+                <HelpCircle
                   className="w-4 h-4 cursor-help inline-block"
                   onMouseEnter={() => setShowTooltip(true)}
                   onMouseLeave={() => setShowTooltip(false)}
                 />
                 {showTooltip && (
                   <div className="absolute left-6 top-0 w-96 p-4 bg-green-900 rounded shadow-lg z-50 text-sm">
-                    <p className="mb-2">Importing will replace all existing projects. Expected JSON schema:</p>
+                    <p className="mb-2">
+                      Importing will replace all existing projects. Expected
+                      JSON schema:
+                    </p>
                     <pre className="bg-black/50 p-2 rounded overflow-x-auto">
                       {schemaExample}
                     </pre>
@@ -131,6 +139,17 @@ export function Settings({ projects, onProjectsImport }: SettingsProps) {
           </div>
         </div>
       </section>
+      <footer className="text-center text-sm fixed bottom-4 left-0 right-0">
+        <p>
+          Made with ❤️ by{" "}
+          <a
+            href="https://github.com/nicoschuldt"
+            className="text-green-500 underline"
+          >
+            nicoschuldt
+          </a>
+        </p>
+      </footer>
     </div>
   );
-} 
+}
