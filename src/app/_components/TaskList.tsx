@@ -1,12 +1,13 @@
-import { Terminal, Check } from "lucide-react";
+import { Terminal, Check, Trash2 } from "lucide-react";
 import { type Task } from "../_lib/types";
 
 interface TaskListProps {
   tasks: Task[];
   onTaskToggle: (taskId: string) => void;
+  onTaskDelete: (taskId: string) => void;
 }
 
-export function TaskList({ tasks, onTaskToggle }: TaskListProps) {
+export function TaskList({ tasks, onTaskToggle, onTaskDelete }: TaskListProps) {
   // Separate and sort tasks
   const incompleteTasks = tasks.filter((task) => !task.completed);
   const completedTasks = tasks.filter((task) => task.completed);
@@ -14,13 +15,15 @@ export function TaskList({ tasks, onTaskToggle }: TaskListProps) {
   const TaskItem = ({ task }: { task: Task }) => (
     <div
       key={task.id}
-      className={`flex items-center group cursor-pointer ${
+      className={`flex items-center group cursor-pointer p-1 rounded hover:bg-green-900/20 ${
         task.completed ? "text-green-800" : ""
       }`}
-      onClick={() => onTaskToggle(task.id)}
     >
       <span className="mr-2 flex-shrink-0">~</span>
-      <button className="mr-2 flex-shrink-0">
+      <button
+        className="mr-2 flex-shrink-0"
+        onClick={() => onTaskToggle(task.id)}
+      >
         {task.completed ? (
           <Check className="w-4 h-4 text-green-500" />
         ) : (
@@ -31,9 +34,20 @@ export function TaskList({ tasks, onTaskToggle }: TaskListProps) {
         className={`font-light flex-grow ${
           task.completed ? "line-through" : ""
         }`}
+        onClick={() => onTaskToggle(task.id)}
       >
         {task.content}
       </p>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onTaskDelete(task.id);
+        }}
+        className="opacity-0 group-hover:opacity-100 transition-opacity ml-2 p-1 rounded bg-green-950 hover:bg-red-950 hover:text-red-500"
+        aria-label="Delete task"
+      >
+        <Trash2 className="w-4 h-4" />
+      </button>
     </div>
   );
 

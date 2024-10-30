@@ -60,7 +60,9 @@ export function ProjectTabs({
                   ref={editInputRef}
                   defaultValue={project.name}
                   className="bg-green-900 text-green-300 px-2 py-1 outline-none"
-                  onBlur={() => onProjectNameChange(editingProject, project.name)}
+                  onBlur={() =>
+                    onProjectNameChange(editingProject, project.name)
+                  }
                 />
               </form>
             ) : (

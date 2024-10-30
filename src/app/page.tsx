@@ -176,7 +176,10 @@ export default function Page() {
         {activeProject === null ? (
           <HomePage projects={projects} onProjectSelect={setActiveProject} />
         ) : activeProject === "settings" ? (
-          <Settings projects={projects} onProjectsImport={handleProjectsImport} />
+          <Settings
+            projects={projects}
+            onProjectsImport={handleProjectsImport}
+          />
         ) : (
           currentProject && (
             <>
@@ -190,15 +193,13 @@ export default function Page() {
         )}
       </main>
 
-      {activeProject && activeProject !== "settings" && (
-        <footer className="p-4 border-t border-green-700">
-          <CommandInput
-            value={inputValue}
-            onChange={setInputValue}
-            onSubmit={handleCommand}
-          />
-        </footer>
-      )}
+      <footer className="p-4 border-t border-green-700">
+        <CommandInput
+          value={inputValue}
+          onChange={setInputValue}
+          onSubmit={handleCommand}
+        />
+      </footer>
 
       <div className="pointer-events-none fixed inset-0 z-50 bg-green-500/5 mix-blend-screen" />
     </div>
