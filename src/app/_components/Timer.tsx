@@ -25,19 +25,7 @@ export function Timer({ project, onTimerToggle }: TimerProps) {
 
   return (
     <div className="m-4 flex flex-col items-center">
-      {/* Press Start 2P from google fonts
-      
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-      */}
-      <style jsx global>{`
-        @font-face {
-          font-family: "Press Start 2P";
-          src: url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
-        }
-      `}</style>
-      <div className="text-5xl mb-6 font-['Press Start 2P'] tracking-wider text-green-500">
+      <div className="text-5xl mb-6 font-mono tracking-wider text-green-500">
         {formatTime(project?.timeSpent || 0)}
       </div>
       <button
