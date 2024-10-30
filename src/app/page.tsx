@@ -168,18 +168,17 @@ export default function Page() {
 
       <main className="flex-1 overflow-auto">
         {activeProject === null ? (
-          <HomePage 
-            projects={projects} 
-            onProjectSelect={setActiveProject} 
-          />
-        ) : currentProject && (
-          <>
-            <Timer project={currentProject} onTimerToggle={toggleTimer} />
-            <TaskList
-              tasks={currentProject.tasks}
-              onTaskToggle={toggleTaskStatus}
-            />
-          </>
+          <HomePage projects={projects} onProjectSelect={setActiveProject} />
+        ) : (
+          currentProject && (
+            <>
+              <Timer project={currentProject} onTimerToggle={toggleTimer} />
+              <TaskList
+                tasks={currentProject.tasks}
+                onTaskToggle={toggleTaskStatus}
+              />
+            </>
+          )
         )}
       </main>
 
