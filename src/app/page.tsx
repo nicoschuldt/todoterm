@@ -155,7 +155,7 @@ export default function Page() {
   const currentProject = projects.find((p) => p.name === activeProject);
 
   return (
-    <div className="flex flex-col h-screen bg-black text-green-500 font-mono">
+    <div className="flex flex-col min-h-screen h-full bg-black text-green-500 font-mono overflow-hidden">
       <ProjectTabs
         projects={projects}
         activeProject={activeProject}
