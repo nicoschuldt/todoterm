@@ -43,6 +43,28 @@ npm run dev
 - Click tasks to mark them as complete
 - Use the timer controls to track time spent on projects
 - Click the home icon to view the dashboard
+- Import/export projects using the settings menu
+
+## Data Schema
+
+When importing/exporting projects, the JSON file should follow this schema:
+
+```json
+[
+  {
+    "name": "Project Name",
+    "tasks": [
+      {
+        "id": "123",
+        "content": "Task description",
+        "completed": false
+      }
+    ],
+    "timeSpent": 0,
+    "isTracking": false
+  }
+]
+```
 
 ## Tech Stack
 

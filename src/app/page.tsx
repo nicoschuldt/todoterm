@@ -7,6 +7,7 @@ import { TaskList } from "./_components/TaskList";
 import { Timer } from "./_components/Timer";
 import { CommandInput } from "./_components/CommandInput";
 import { HomePage } from "./_components/HomePage";
+import { Settings } from "./_components/Settings";
 
 export default function Page() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -154,6 +155,11 @@ export default function Page() {
 
   const currentProject = projects.find((p) => p.name === activeProject);
 
+  const handleProjectsImport = (importedProjects: Project[]) => {
+    setProjects(importedProjects);
+    setActiveProject(importedProjects[0]?.name || null);
+  };
+
   return (
     <div className="flex flex-col min-h-screen h-full bg-black text-green-500 font-mono overflow-hidden">
       <ProjectTabs
@@ -169,6 +175,8 @@ export default function Page() {
       <main className="flex-1 overflow-auto">
         {activeProject === null ? (
           <HomePage projects={projects} onProjectSelect={setActiveProject} />
+        ) : activeProject === "settings" ? (
+          <Settings projects={projects} onProjectsImport={handleProjectsImport} />
         ) : (
           currentProject && (
             <>
