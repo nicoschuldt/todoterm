@@ -17,7 +17,7 @@ export function ProgressBar({ progress, size = "large" }: ProgressBarProps) {
       <div
         className={`
             w-full
-            ${size === "large" ? "border border-green-500/50 p-1" : ""}
+            ${size === "large" ? "border border-green-500/10 p-1" : ""}
             relative overflow-hidden
           `}
       >
@@ -28,8 +28,11 @@ export function ProgressBar({ progress, size = "large" }: ProgressBarProps) {
               className={`
                   flex-1
                   ${size === "large" ? "h-3" : "h-1"}
-                  ${i < filledBlocks ? "bg-green-500" : "bg-green-900/30"}
-                  ${size === "large" ? "shadow-[0_0_5px_#00FF00]" : ""}
+                  ${
+                    i < filledBlocks
+                      ? "bg-green-500 shadow-[0_0_5px_#00FF00]"
+                      : "bg-green-950/30"
+                  }
                   ${i === 0 ? "rounded-l" : ""}
                   ${i === blocks - 1 ? "rounded-r" : ""}
                   ${size === "large" ? "mx-px" : ""}
