@@ -160,6 +160,19 @@ export default function Page() {
     setActiveProject(importedProjects[0]?.name || null);
   };
 
+  const deleteTask = (taskId: string) => {
+    setProjects((prevProjects) =>
+      prevProjects.map((project) =>
+        project.name === activeProject
+          ? {
+              ...project,
+              tasks: project.tasks.filter((task) => task.id !== taskId),
+            }
+          : project
+      )
+    );
+  };
+
   return (
     <div className="flex flex-col min-h-screen h-full bg-black text-green-500 font-mono overflow-hidden">
       <ProjectTabs
@@ -187,19 +200,22 @@ export default function Page() {
               <TaskList
                 tasks={currentProject.tasks}
                 onTaskToggle={toggleTaskStatus}
+                onTaskDelete={deleteTask}
               />
             </>
           )
         )}
       </main>
 
-      <footer className="p-4 border-t border-green-700">
-        <CommandInput
-          value={inputValue}
-          onChange={setInputValue}
-          onSubmit={handleCommand}
-        />
-      </footer>
+      {activeProject && activeProject !== "settings" && (
+        <footer className="p-4 border-t border-green-700">
+          <CommandInput
+            value={inputValue}
+            onChange={setInputValue}
+            onSubmit={handleCommand}
+          />
+        </footer>
+      )}
 
       <div className="pointer-events-none fixed inset-0 z-50 bg-green-500/5 mix-blend-screen" />
     </div>
