@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { appleII } from './_lib/fonts'
 
 export const metadata: Metadata = {
   title: "ToDo Term",
@@ -15,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className={`${appleII.variable}`}>
       <body className="h-full bg-black text-green-500 font-mono antialiased">
         {children}
       </body>

@@ -8,6 +8,7 @@ import { Timer } from "./_components/Timer";
 import { CommandInput } from "./_components/CommandInput";
 import { HomePage } from "./_components/HomePage";
 import { Settings } from "./_components/Settings";
+import { ProgressBar } from "./_components/ProgressBar";
 
 export default function Page() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -174,7 +175,7 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen h-full bg-black text-green-500 font-mono overflow-hidden">
+    <div className="flex flex-col min-h-screen h-full bg-black text-green-500 font-apple overflow-hidden">
       <ProjectTabs
         projects={projects}
         activeProject={activeProject}
@@ -196,6 +197,7 @@ export default function Page() {
         ) : (
           currentProject && (
             <>
+              <ProgressBar tasks={currentProject.tasks} size="large" />
               <Timer project={currentProject} onTimerToggle={toggleTimer} />
               <TaskList
                 tasks={currentProject.tasks}

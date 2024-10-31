@@ -68,7 +68,7 @@ export function ProjectTabs({
             ) : (
               <div className="flex flex-col">
                 <button
-                  className={`px-4 py-2 whitespace-nowrap ${
+                  className={`px-4 py-2 text-sm whitespace-nowrap ${
                     activeProject === project.name
                       ? "bg-green-900 text-green-300"
                       : "hover:bg-green-900/50"
@@ -83,10 +83,7 @@ export function ProjectTabs({
                   )}
                   {project.name}
                 </button>
-                <ProgressBar
-                  progress={calculateProgress(project.tasks)}
-                  size="small"
-                />
+                <ProgressBar tasks={project.tasks} size="small" />
               </div>
             )}
           </div>

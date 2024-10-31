@@ -17,15 +17,9 @@ export function Timer({ project, onTimerToggle }: TimerProps) {
       .padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
   };
 
-  const calculateProgress = (tasks: Project["tasks"]) => {
-    if (tasks.length === 0) return 0;
-    const completedTasks = tasks.filter((task) => task.completed).length;
-    return Math.round((completedTasks / tasks.length) * 100);
-  };
-
   return (
     <div className="m-4 flex flex-col items-center">
-      <div className="text-5xl mb-6 font-mono tracking-wider text-green-500">
+      <div className="text-5xl mb-6 tracking-wider text-green-500">
         {formatTime(project?.timeSpent || 0)}
       </div>
       <button
@@ -54,7 +48,6 @@ export function Timer({ project, onTimerToggle }: TimerProps) {
           </>
         )}
       </button>
-      <ProgressBar progress={calculateProgress(project.tasks)} size="large" />
     </div>
   );
 }

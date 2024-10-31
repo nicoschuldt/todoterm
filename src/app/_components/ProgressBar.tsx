@@ -1,10 +1,19 @@
+import { Project } from "../_lib/types";
+
 interface ProgressBarProps {
-  progress: number;
+  tasks: Project["tasks"];
   size?: "large" | "small";
 }
 
-export function ProgressBar({ progress, size = "large" }: ProgressBarProps) {
+const calculateProgress = (tasks: Project["tasks"]) => {
+  if (tasks.length === 0) return 0;
+  const completedTasks = tasks.filter((task) => task.completed).length;
+  return Math.round((completedTasks / tasks.length) * 100);
+};
+
+export function ProgressBar({ tasks, size = "large" }: ProgressBarProps) {
   const blocks = size === "large" ? 30 : 15;
+  const progress = calculateProgress(tasks);
   const filledBlocks = Math.floor((progress / 100) * blocks);
 
   return (

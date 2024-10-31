@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Apple2';
+  src: url('/fonts/Apple2.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   color-scheme: dark;
 }
@@ -12,6 +19,7 @@ html {
 
 body {
   min-height: 100vh;
+  font-family: 'Apple2', monospace; /* Fallback to monospace */
 }
 
 /* Ensure proper select styling */
@@ -56,3 +64,6 @@ input::placeholder {
 ::-webkit-scrollbar-thumb:hover {
   background: rgb(34 197 94);
 }
+
+
+
