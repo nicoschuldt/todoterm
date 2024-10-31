@@ -191,16 +191,28 @@ export default function Page() {
     console.log(`Pomodoro phase complete: ${phase}`);
   };
 
-  const handlePomodoroStateUpdate = (projectName: string, newState: Partial<PomodoroState>) => {
-    setProjects(prev =>
-      prev.map(p =>
+  const handlePomodoroStateUpdate = (
+    projectName: string,
+    newState: Partial<PomodoroState>
+  ) => {
+    setProjects((prev) =>
+      prev.map((p) =>
         p.name === projectName
           ? {
               ...p,
-              pomodoroState: {
-                ...p.pomodoroState,
-                ...newState
-              }
+              pomodoroState: p.pomodoroState
+                ? {
+                    ...p.pomodoroState,
+                    ...newState,
+                  }
+                : {
+                    isActive: false,
+                    currentPhase: "work",
+                    sessionTime: p.pomodoroSettings?.workDuration || 25 * 60,
+                    cyclesCompleted: 0,
+                    waitingForNextPhase: false,
+                    ...newState,
+                  },
             }
           : p
       )
