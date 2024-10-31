@@ -26,7 +26,11 @@ export function ProgressBar({ tasks, size = "large" }: ProgressBarProps) {
       <div
         className={`
             w-full
-            ${size === "large" ? "border border-green-500/10 p-1" : ""}
+            ${
+              size === "large"
+                ? "border-green-700/90 border-4 p-1 shadow-green-800/20 shadow-lg"
+                : ""
+            }
             relative overflow-hidden
           `}
       >

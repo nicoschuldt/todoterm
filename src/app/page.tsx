@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { type Project } from "./_lib/types";
+import { PomodoroSettings, type Project, PomodoroState } from "./_lib/types";
 import { ProjectTabs } from "./_components/ProjectTabs";
 import { TaskList } from "./_components/TaskList";
 import { Timer } from "./_components/Timer";
@@ -9,6 +9,7 @@ import { CommandInput } from "./_components/CommandInput";
 import { HomePage } from "./_components/HomePage";
 import { Settings } from "./_components/Settings";
 import { ProgressBar } from "./_components/ProgressBar";
+import { DEFAULT_POMODORO_SETTINGS } from "./_lib/constants";
 
 export default function Page() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -174,6 +175,38 @@ export default function Page() {
     );
   };
 
+  const handlePomodoroSettingsUpdate = (settings: PomodoroSettings) => {
+    setProjects((prev) =>
+      prev.map((p) => ({
+        ...p,
+        pomodoroSettings: settings,
+      }))
+    );
+  };
+
+  const handlePomodoroComplete = (
+    phase: "work" | "shortBreak" | "longBreak"
+  ) => {
+    // Handle pomodoro phase completion
+    console.log(`Pomodoro phase complete: ${phase}`);
+  };
+
+  const handlePomodoroStateUpdate = (projectName: string, newState: Partial<PomodoroState>) => {
+    setProjects(prev =>
+      prev.map(p =>
+        p.name === projectName
+          ? {
+              ...p,
+              pomodoroState: {
+                ...p.pomodoroState,
+                ...newState
+              }
+            }
+          : p
+      )
+    );
+  };
+
   return (
     <div className="flex flex-col min-h-screen h-full bg-black text-green-500 font-apple overflow-hidden">
       <ProjectTabs
@@ -193,29 +226,42 @@ export default function Page() {
           <Settings
             projects={projects}
             onProjectsImport={handleProjectsImport}
+            onPomodoroSettingsUpdate={handlePomodoroSettingsUpdate}
+            currentPomodoroSettings={
+              projects[0]?.pomodoroSettings || DEFAULT_POMODORO_SETTINGS
+            }
           />
         ) : (
           currentProject && (
-            <>
+            <div className="space-y-10 p-4 flex flex-col">
               <ProgressBar tasks={currentProject.tasks} size="large" />
-              <Timer project={currentProject} onTimerToggle={toggleTimer} />
               <TaskList
                 tasks={currentProject.tasks}
                 onTaskToggle={toggleTaskStatus}
                 onTaskDelete={deleteTask}
               />
-            </>
+            </div>
           )
         )}
       </main>
 
       {activeProject && activeProject !== "settings" && (
         <footer className="p-4 border-t border-green-700">
-          <CommandInput
-            value={inputValue}
-            onChange={setInputValue}
-            onSubmit={handleCommand}
-          />
+          {currentProject && (
+            <>
+              <Timer
+                project={currentProject}
+                onTimerToggle={toggleTimer}
+                onPomodoroComplete={handlePomodoroComplete}
+                onPomodoroStateUpdate={handlePomodoroStateUpdate}
+              />
+              <CommandInput
+                value={inputValue}
+                onChange={setInputValue}
+                onSubmit={handleCommand}
+              />
+            </>
+          )}
         </footer>
       )}
 

@@ -15,7 +15,7 @@ export function TaskList({ tasks, onTaskToggle, onTaskDelete }: TaskListProps) {
   const TaskItem = ({ task }: { task: Task }) => (
     <div
       key={task.id}
-      className={`flex items-center group cursor-pointer p-1 rounded hover:bg-green-900/20 ${
+      className={`flex items-center group cursor-pointer ${
         task.completed ? "text-green-800" : ""
       }`}
     >
@@ -43,7 +43,7 @@ export function TaskList({ tasks, onTaskToggle, onTaskDelete }: TaskListProps) {
           e.stopPropagation();
           onTaskDelete(task.id);
         }}
-        className="opacity-0 group-hover:opacity-100 transition-opacity ml-2 p-1 rounded bg-green-950 hover:bg-red-950 hover:text-red-500"
+        className="opacity-0 group-hover:opacity-100 transition-opacity ml-2 hover:text-red-500"
         aria-label="Delete task"
       >
         <Trash2 className="w-4 h-4" />

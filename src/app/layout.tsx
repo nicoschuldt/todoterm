@@ -17,9 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${appleII.variable}`}>
-      <body className="h-full bg-black text-green-500 font-mono antialiased">
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

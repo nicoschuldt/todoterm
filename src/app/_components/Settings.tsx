@@ -1,13 +1,154 @@
-import { useState } from "react";
-import { type Project } from "../_lib/types";
-import { HelpCircle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { type Project, PomodoroSettings } from "../_lib/types";
+import { Heart, HelpCircle } from "lucide-react";
 
 interface SettingsProps {
   projects: Project[];
   onProjectsImport: (projects: Project[]) => void;
+  onPomodoroSettingsUpdate: (settings: PomodoroSettings) => void;
+  currentPomodoroSettings: PomodoroSettings;
 }
 
-export function Settings({ projects, onProjectsImport }: SettingsProps) {
+const DEFAULT_POMODORO_SETTINGS: PomodoroSettings = {
+  workDuration: 25,
+  shortBreakDuration: 5,
+  longBreakDuration: 15,
+  cyclesBeforeLongBreak: 4,
+  autoStartCycles: false,
+};
+
+interface PomodoroSettingsFormProps {
+  settings: PomodoroSettings;
+  onSave: (settings: PomodoroSettings) => void;
+}
+
+function PomodoroSettingsForm({ settings, onSave }: PomodoroSettingsFormProps) {
+  const [formData, setFormData] = useState<PomodoroSettings>({
+    workDuration: settings?.workDuration ?? DEFAULT_POMODORO_SETTINGS.workDuration,
+    shortBreakDuration: settings?.shortBreakDuration ?? DEFAULT_POMODORO_SETTINGS.shortBreakDuration,
+    longBreakDuration: settings?.longBreakDuration ?? DEFAULT_POMODORO_SETTINGS.longBreakDuration,
+    cyclesBeforeLongBreak: settings?.cyclesBeforeLongBreak ?? DEFAULT_POMODORO_SETTINGS.cyclesBeforeLongBreak,
+    autoStartCycles: settings?.autoStartCycles ?? DEFAULT_POMODORO_SETTINGS.autoStartCycles,
+  });
+
+  useEffect(() => {
+    if (settings) {
+      setFormData(settings);
+    }
+  }, [settings]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSave(formData);
+  };
+
+  const resetToDefaults = () => {
+    setFormData({
+      workDuration: 25,
+      shortBreakDuration: 5,
+      longBreakDuration: 15,
+      cyclesBeforeLongBreak: 4,
+      autoStartCycles: false,
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="block mb-1">Work Duration (minutes)</label>
+        <input
+          type="number"
+          value={formData.workDuration}
+          onChange={(e) =>
+            setFormData({ ...formData, workDuration: Number(e.target.value) })
+          }
+          className="bg-green-900/30 border border-green-500/20 px-3 py-1 rounded w-full"
+        />
+      </div>
+
+      <div>
+        <label className="block mb-1">Short Break Duration (minutes)</label>
+        <input
+          type="number"
+          value={formData.shortBreakDuration}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              shortBreakDuration: Number(e.target.value),
+            })
+          }
+          className="bg-green-900/30 border border-green-500/20 px-3 py-1 rounded w-full"
+        />
+      </div>
+
+      <div>
+        <label className="block mb-1">Long Break Duration (minutes)</label>
+        <input
+          type="number"
+          value={formData.longBreakDuration}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              longBreakDuration: Number(e.target.value),
+            })
+          }
+          className="bg-green-900/30 border border-green-500/20 px-3 py-1 rounded w-full"
+        />
+      </div>
+
+      <div>
+        <label className="block mb-1">Cycles Before Long Break</label>
+        <input
+          type="number"
+          value={formData.cyclesBeforeLongBreak}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              cyclesBeforeLongBreak: Number(e.target.value),
+            })
+          }
+          className="bg-green-900/30 border border-green-500/20 px-3 py-1 rounded w-full"
+        />
+      </div>
+
+      <div className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          id="autoStartCycles"
+          checked={formData.autoStartCycles}
+          onChange={(e) =>
+            setFormData({ ...formData, autoStartCycles: e.target.checked })
+          }
+          className="bg-green-900/30 border border-green-500/20 rounded"
+        />
+        <label htmlFor="autoStartCycles">Auto-start next phase</label>
+      </div>
+
+      <div className="flex gap-4">
+        <button
+          type="submit"
+          className="px-4 py-2 bg-green-900 hover:bg-green-800 rounded"
+        >
+          Save Settings
+        </button>
+        <button
+          type="button"
+          onClick={resetToDefaults}
+          className="px-4 py-2 bg-green-900/50 hover:bg-green-800/50 rounded"
+        >
+          Reset to Defaults
+        </button>
+      </div>
+    </form>
+  );
+}
+
+export function Settings({
+  projects,
+  onProjectsImport,
+  onPomodoroSettingsUpdate,
+  currentPomodoroSettings = DEFAULT_POMODORO_SETTINGS,
+}: SettingsProps) {
   const [importError, setImportError] = useState<string>("");
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -91,6 +232,14 @@ export function Settings({ projects, onProjectsImport }: SettingsProps) {
       <h1 className="text-2xl mb-8">Settings</h1>
 
       <section className="mb-8">
+        <h2 className="text-xl mb-4">Pomodoro Settings</h2>
+        <PomodoroSettingsForm
+          settings={currentPomodoroSettings}
+          onSave={onPomodoroSettingsUpdate}
+        />
+      </section>
+
+      <section className="mb-8">
         <h2 className="text-xl mb-4">Data Management</h2>
 
         <div className="space-y-4">
@@ -141,7 +290,7 @@ export function Settings({ projects, onProjectsImport }: SettingsProps) {
       </section>
       <footer className="text-center text-sm fixed bottom-4 left-0 right-0">
         <p>
-          Made with ❤️ by{" "}
+          Made with <Heart className="w-4 h-4 inline-block" /> by{" "}
           <a
             href="https://github.com/nicoschuldt"
             className="text-green-500 underline"
